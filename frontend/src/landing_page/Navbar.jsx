@@ -5,7 +5,7 @@ function Navbar() {
   return (
       <nav style={{paddingRight : "1rem"}} class="navbar navbar-expand-lg bg-body-tertiary sticky-top bg-light">
         <div class="container-fluid">
-          <Link style={{width : "5rem"}} class="navbar-brand" to="/homepage">
+          <Link style={{width : "5rem"}} class="navbar-brand" to="/">
             <img style={{ width: "100%"}} src="/logozerodha.svg"></img>
           </Link>
           <button
@@ -22,7 +22,7 @@ function Navbar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <Link class="nav-link anchor-tag-Navbar" to="/Signup">
+                <Link class="nav-link anchor-tag-Navbar" to="http://localhost:5174/signup">
                   Signup
                 </Link>
               </li>

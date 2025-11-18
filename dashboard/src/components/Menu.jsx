@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {useState} from "react";
+import Usermenu from "./Usermenu";
 
-const Menu = () => {
+const Menu = ({name,logout}) => {
   const[selectedItem,setSelectedItem] = useState(0);
   const[userMenu,setUserMenu] = useState(false);
 
@@ -58,7 +59,8 @@ const Menu = () => {
         <hr />
         <div className="profile" onClick={dropUserMenu}>
           <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
+          <p className="username">{name}</p>
+          {userMenu && <Usermenu logout={logout}/>}
         </div>
       </div>
     </div>

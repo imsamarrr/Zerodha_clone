@@ -16,11 +16,17 @@ require("dotenv").config();
 
 let PORT = process.env.PORT || 3002;
 let URL = process.env.MONGO_URL;
+mongoose
+    .connect(URL)
+    .then(console.log("DB connected"))
+    .catch((err) => {
+      console.log(err);
+    });
 
 app.use(cors({
-    origin: "http://localhost:5174", 
-    credentials: true,                 
-  }));
+    origin: "http://localhost:5174",
+    credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser()); 
 app.use(express.urlencoded({ extended: true }));
@@ -64,6 +70,10 @@ app.delete("/deletestock/:name", async (req, res) => {
   }
 });
 
+app.get("/signup",(req,res)=>{
+  res.send("Here signup form");
+});
+
 app.post("/signup", async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
@@ -82,7 +92,7 @@ app.post("/signup", async (req, res, next) => {
     });
     return res.status(201).json({
       message: "user signed in successfully",
-      sucess: true,
+      success: true,
       newUser,
     });
   } catch (err) {
@@ -103,7 +113,7 @@ app.post("/login", async (req, res) => {
     if(user.username != username){
       return res.json({message : "Incorrect username"});
     }
-    const auth = bcrypt.compare(password, user.password);
+    const auth = await bcrypt.compare(password, user.password);
     if (!auth) {
       return res.json({ message: "Incorrect Password" });
     }
@@ -148,10 +158,4 @@ app.post("/newOrder", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`server is listening at ${PORT}`);
-  mongoose
-    .connect(URL)
-    .then(console.log("DB connected"))
-    .catch((err) => {
-      console.log(err);
-    });
 });

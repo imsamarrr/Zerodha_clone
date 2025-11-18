@@ -1034,3 +1034,30 @@ fieldset {
 .qty {
   padding-top : 1rem;
 }
+
+.Usermenu {
+  height : 50px;
+  width : 150px;
+  position : fixed;
+  background-color : rgb(255, 255, 255);
+  top : 5rem;
+  right: 1.3rem;
+  border-radius : 1rem;
+  display : flex;
+  justify-content : center;
+  align-items : center;
+}
+.Usermenu button {
+  border : none;
+  background-color : red;
+  border-radius : 1rem;
+  font-weight : 500;
+  color : white;
+  width : 100px;
+  height : 60%;
+  transition : all 0.08s 0.1s linear;
+}
+
+.Usermenu button:hover {
+  transform : scale(1.08);
+}

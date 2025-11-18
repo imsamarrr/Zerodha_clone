@@ -8,7 +8,7 @@ import PricingPage from "./landing_page/Pricing/PricingPage";
 import SupportPage from "./landing_page/Support/SupportPage";
 import ProductsPage from "./landing_page/Products/ProductsPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./index.css";
+import "./landingPage.css";
 import Navbar from './landing_page/Navbar';
 import Footer from './landing_page/Footer';
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -19,7 +19,7 @@ createRoot(document.getElementById("root")).render(
   <BrowserRouter>
   <Navbar/>
   <Routes>
-    <Route path="/homepage" element={<HomePage/>}/>
+    <Route path="/" element={<HomePage/>}/>
     <Route path="/Signup" element={<SignupPage/>}/>
     <Route path="/login" element={<LoginPage/>}/>
     <Route path="/About" element={<AboutPage/>}/>
