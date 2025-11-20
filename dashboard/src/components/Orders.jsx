@@ -1,57 +1,65 @@
 import React from "react";
+// import {holdings} from "../data/data";
 import axios from "axios";
+import VerticalGraph from "./verticalGraph";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-
+import BuyStockWindow from "./BuyStockWindow";
+import SellStockWindow from "./SellStockWindow";
+import { Tooltip, Grow } from "@mui/material";
 const Orders = () => {
-  const [orders, setOrders] = useState([]);
-  const getOrders = async () => {
-    const res = await axios.get("http://localhost:3002/orders");
-    setOrders(res.data);
-  };
+  const [allStocks, setAllStocks] = useState([]);
 
   useEffect(() => {
-    getOrders();
+    axios.get("http://localhost:3002/allStocks").then((res) => {
+      setAllStocks(res.data);
+    });
   }, []);
-
   return (
-    <div className="orders">
-      {orders.length == 0 ? (
-        <div className="no-orders">
-          <p>You haven't placed any orders today</p>
-          <Link to={"/"} className="btn">
-            Get started
-          </Link>
-        </div>
-      ) : (
-        <div className="cnt-orders">
-          {orders.map((order, index) => (
-            <OrdersItem key={index} order={order} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+    <>
+      <h3 className="title">Stocks</h3>
 
-const OrdersItem = ({ order }) => {
-  return (
-    <div className="orders-list">
-      <div className="order-para">
-        <p>ID: {order._id}</p>
+      <div className="order-table">
+        <table>
+          <tr>
+            <th>Instrument</th>
+            <th>Avg. cost</th>
+            <th>LTP</th>
+          </tr>
+        </table>
       </div>
-      <div className="order-name">
-        <p><i style={{color : "rgba(255, 0, 0, 1)",fontSize : "0.9rem", transform: "translateY(-2px)"}}className="fa-solid fa-octagon"></i>&nbsp;{order.name}</p>
-      </div>
-      <div className="order-qty-price">
-        <p className="qty-order">Qty.&nbsp;</p>
-        <p>{order.qty}</p>
-        <p style={{marginLeft : "1.5rem"}} className="price-order">₹{order.price}</p>
-      </div>
-      <div  style={{ marginTop : "1rem"}}className="price-qty-label">
-        <button className="btn-order">Sell</button>
-      </div>
-    </div>
+      {allStocks.map((data, index) => {
+        return (
+          <div className="order-table">
+            <table>
+              <tr key={index}>
+                <td>{data.name}</td>
+                <td>{data.avg}</td>
+                <td>{data.price}</td>
+                {/* <Tooltip
+                  title="Buy(B)"
+                  placement="top"
+                  arrowTransitionComponent={Grow}
+                >
+                  <button onClick={() => openBuyPopup(uuid)} className="buy">
+                    Buy
+                  </button>
+                </Tooltip> */}
+
+                {/* <Tooltip
+                  title="Sell(S)"
+                  placement="top"
+                  arrowTransitionComponent={Grow}
+                >
+                  <button onClick={() => openSellPopup(uuid)} className="sell">
+                    Sell
+                  </button>
+                </Tooltip> */}
+              </tr>
+            </table>
+          </div>
+        );
+      })}
+    </>
   );
 };
 

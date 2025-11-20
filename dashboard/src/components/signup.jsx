@@ -72,11 +72,11 @@ function Signup() {
           investors and traders
         </p>
       </div>
-      <div className="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-center signup-form">
         <div style={{ marginTop: "2rem" }} className="col-6 mt-5">
           <p className="fw-semibold fs-4">Signup now</p>
           <p style={{ color: "grey" }}>Or track your existing application</p>
-          <form onSubmit={handleSubmit}>
+          <form className="form-signup-login" onSubmit={handleSubmit}>
             <input
               name="username"
               onChange={handleOnChange}

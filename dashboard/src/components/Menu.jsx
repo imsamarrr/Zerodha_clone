@@ -30,11 +30,11 @@ const Menu = ({name,logout}) => {
               <p className={selectedItem ==0?activemenuclass : menuclass}>Dashboard</p>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link style={{ textDecoration: "none",color : "black" }} to="/orders" onClick={()=>{handleMenuClick(1)}}>
-              <p className={selectedItem ==1?activemenuclass : menuclass}>Orders</p>
+              <p className={selectedItem ==1?activemenuclass : menuclass}>Stocks</p>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link style={{ textDecoration: "none",color : "black" }} to="/holdings" onClick={()=>{handleMenuClick(2)}}>
               <p className={selectedItem ==2?activemenuclass : menuclass}>Holdings</p>

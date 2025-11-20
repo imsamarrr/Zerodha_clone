@@ -7,18 +7,55 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
   const [stockPrice, setStockPrice] = useState(stock.price);
   const handleBuyClick = async () => {
     try {
-      const res = await axios.post("http://localhost:3002/newOrder", {
-        id : uuid,
+      // const res = await axios.post("http://localhost:3002/newOrder", {
+      //   id : uuid,
+      //   name: stock.name,
+      //   qty: stockQuantity,
+      //   price: (stockQuantity * stockPrice).toFixed(2),
+      //   avg : stock.avg,
+      //   mode: "Buy",
+      // });
+
+      const {data} = await axios.post("http://localhost:3002/",{},{withCredentials : true});
+      let {curruserId} = data;
+
+      const allHoldings = await axios.get("http://localhost:3002/allholdings");
+      const namematch = allHoldings.data.find(
+        (items) => items.name === stock.name && items.userId === curruserId
+      );
+
+      
+      const mode = namematch ? "Update" : "Buy";
+      const buyData = {
+        id: uuid,
         name: stock.name,
         qty: stockQuantity,
         price: (stockQuantity * stockPrice).toFixed(2),
-        mode: "Buy",
-      });
-
-      onClose(uuid);
-      console.log("Order saved");
+        avg: stock.avg,
+        mode: mode,
+        curruserId : curruserId,
+      };
+      if (namematch) {
+        const res = await axios.post(
+          `http://localhost:3002/buyorder/${mode}`,
+          buyData
+        );
+        onClose();
+        console.log("Order Updated");
+        alert(
+          `${stockQuantity} Shares of ${stock.name} are bought and updated in holdings`
+        );
+      } else {
+        const res = await axios.post(`http://localhost:3002/newOrder`, buyData);
+        onClose();
+        console.log("Order created");
+        console.log(curruserId);
+        alert(`${stockQuantity} Shares of ${stock.name} are bought`);
+      }
     } catch (err) {
+      onClose();
       console.log("Error:", err);
+      alert("There is some problem while buying stock");
     }
   };
   return (
@@ -26,7 +63,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
       <div className="inputs">
         <fieldset>
           <div className="qty">
-            <label htmlfor="qty">Qty.</label>
+            <label htmlFor="qty">Qty.</label>
             <input
               type="text"
               placeholder="Enter Qty."
@@ -36,7 +73,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
             ></input>
           </div>
           <div className="price">
-            <label htmlfor="price">Price</label>
+            <label htmlFor="price">Price</label>
             <input
               type="text"
               placeholder={stockQuantity * stock.price}
@@ -44,6 +81,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
               onChange={(e) => setStockPrice(e.target.value)}
               id="price"
               value={stockQuantity * stock.price}
+              readOnly
             ></input>
           </div>
         </fieldset>
@@ -62,7 +100,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
             </button>
             <button
               style={{ border: "1px solid grey" }}
-              onClick={() => onClose(uuid)}
+              onClick={() => onClose()}
             >
               Cancel
             </button>

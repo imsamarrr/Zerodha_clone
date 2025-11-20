@@ -5,35 +5,43 @@ const holdingsmodel = require("./schemas/holdingsSchema");
 const positionsmodel = require("./schemas/positionSchema");
 const watchlistmodel = require("./schemas/watchlistSchema");
 const ordersModel = require("./schemas/orderSchema");
+const stocksModel = require("./schemas/stockSchema");
 const User = require("./schemas/userSchema");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 const bodyparser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { createSecretToken } = require("./utils/secretToken");
-const {userVerification} = require("./middlewares/authMiddleware");
+const { userVerification } = require("./middlewares/authMiddleware");
 require("dotenv").config();
 
 let PORT = process.env.PORT || 3002;
 let URL = process.env.MONGO_URL;
 mongoose
-    .connect(URL)
-    .then(console.log("DB connected"))
-    .catch((err) => {
-      console.log(err);
-    });
+  .connect(URL)
+  .then(console.log("DB connected"))
+  .catch((err) => {
+    console.log(err);
+  });
 
-app.use(cors({
+app.use(
+  cors({
     origin: "http://localhost:5174",
-    credentials: true
-}));
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/allholdings", async (req, res) => {
+app.get("/allholdings",async (req, res) => {
   const allholdings = await holdingsmodel.find({});
   res.json(allholdings);
+});
+
+app.get("/allStocks", async (req, res) => {
+  const allStocks = await stocksModel.find({});
+  res.json(allStocks);
 });
 
 app.get("/allpositions", async (req, res) => {
@@ -41,11 +49,11 @@ app.get("/allpositions", async (req, res) => {
   res.json(allpositions);
 });
 
-app.get("/",(req, res) => {
+app.get("/", (req, res) => {
   res.send("Backend");
 });
 
-app.post("/",userVerification);
+app.post("/", userVerification);
 
 app.get("/allWatchlist", async (req, res) => {
   const allWatchlist = await watchlistmodel.find({});
@@ -70,7 +78,7 @@ app.delete("/deletestock/:name", async (req, res) => {
   }
 });
 
-app.get("/signup",(req,res)=>{
+app.get("/signup", (req, res) => {
   res.send("Here signup form");
 });
 
@@ -102,7 +110,7 @@ app.post("/signup", async (req, res, next) => {
 
 app.post("/login", async (req, res) => {
   try {
-    const { username,email, password } = req.body;
+    const { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.json({ message: "All fields are required" });
     }
@@ -110,8 +118,8 @@ app.post("/login", async (req, res) => {
     if (!user) {
       return res.json({ message: "Incorrect Email" });
     }
-    if(user.username != username){
-      return res.json({message : "Incorrect username"});
+    if (user.username != username) {
+      return res.json({ message: "Incorrect username" });
     }
     const auth = await bcrypt.compare(password, user.password);
     if (!auth) {
@@ -121,6 +129,10 @@ app.post("/login", async (req, res) => {
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
+      path: "/", // Make cookie available throughout the app
+      httpOnly: false, // MUST be false so your Home.jsx can read 'cookies.token'
+      secure: false, // MUST be false because you are on localhost (http, not https)
+      sameSite: "Lax",
     });
     res.status(201).json({ message: "User logged in", success: true, user });
   } catch (err) {
@@ -128,7 +140,43 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/newOrder", async (req, res) => {
+app.post("/sellStock/:action", async (req, res) => {
+  const { name, sellqty, sellprice, fullySold } = req.body;
+  console.log(sellqty);
+  console.log(sellprice);
+  let parsedqty = parseInt(sellqty);
+  let sellpricefixed = sellprice.toFixed(2);
+
+  if (isNaN(parsedqty)) {
+    console.error("Received quantity is NaN:", sellqty);
+    // Send an error response back to the client
+    return res.status(400).json({ message: "Invalid quantity provided." });
+  }
+
+  if (!fullySold) {
+    let result = await holdingsmodel.findOneAndUpdate(
+      { name: name },
+      { $inc: { qty: -parsedqty, price: -sellpricefixed } },
+      { new: true }
+    );
+    return res.json({ message: "Partial sale successful", holdings: result });
+  } else {
+    let result = await holdingsmodel.findOneAndDelete({ name: name });
+    return res.json({ message: "Fully sold, holding deleted" });
+  }
+});
+
+app.post("/buyorder/:action", async (req, res) => {
+  const { name, qty, avg, price,curruserId } = req.body;
+  let result = await holdingsmodel.findOneAndUpdate(
+    { name: name , userId : curruserId },
+    { $inc: { qty: qty, price: price } },
+    { new: true }
+  );
+  return res.json({ message: "Holding updates", holdings: result });
+});
+
+app.post("/newOrder",async (req, res) => {
   try {
     let newOrder = new ordersModel({
       name: req.body.name,
@@ -137,14 +185,16 @@ app.post("/newOrder", async (req, res) => {
       mode: req.body.mode,
     });
     newOrder.save();
+    console.log(req.body.avg);
 
     let newHoldings = new holdingsmodel({
       name: req.body.name,
       qty: req.body.qty,
-      avg: 0,
+      avg: req.body.avg,
       price: req.body.price,
       net: "Null",
       day: "Null",
+      userId : req.body.curruserId
     });
     newHoldings.save();
 

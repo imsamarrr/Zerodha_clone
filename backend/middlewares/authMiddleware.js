@@ -14,10 +14,11 @@ module.exports.userVerification = async(req,res)=>{
         }else {
             let user = await User.findById(data.id); //here data is payload when we created id so data = { id : user._id}
             if(user){
-                res.json({status : true,user : user.username});
+                res.json({status : true,user : user.username, curruserId : data.id});
             }else {
                 return res.json({status : false});
             }
         }
+
     });
 }

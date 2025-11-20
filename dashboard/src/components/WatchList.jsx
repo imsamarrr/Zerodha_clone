@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip, Grow } from "@mui/material";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -10,7 +10,6 @@ import BuyStockWindow from "./BuyStockWindow";
 import SellStockWindow from "./SellStockWindow";
 
 const WatchList = () => {
-
   const [watchlist, setWatchlist] = useState([]);
   const getOrders = async () => {
     const res = await axios.get("http://localhost:3002/allWatchlist");
@@ -46,6 +45,7 @@ export default WatchList;
 
 const WatchListItem = ({ stock }) => {
   const [buyPopup, setBuyPopup] = useState({ open: false, uuid: null });
+    const [curruserId, setCurruserId] = useState("");
 
   const openBuyPopup = (uuid) => {
     setBuyPopup({ open: true, uuid: uuid });
@@ -75,6 +75,19 @@ const WatchListItem = ({ stock }) => {
     setShowWatchListItems(false);
   };
   const id = stock._id;
+
+  useEffect(() => {
+    let fetchcurruserId = async () => {
+      const res = await axios.post(
+        "http://localhost:3002/",
+        {},
+        { withCredentials: true }
+      );
+      setCurruserId(res.data.curruserId);
+    };
+
+    fetchcurruserId();
+  });
   return (
     <li
       className="list"
@@ -97,38 +110,33 @@ const WatchListItem = ({ stock }) => {
       </div>
       {showWatchListItems && (
         <WatchListItemsActions
-        name={stock.name}
+          name={stock.name}
           uuid={id}
           openBuyPopup={openBuyPopup}
           openSellPopup={openSellPopup}
+          curruserId = {curruserId}
         />
       )}
       {buyPopup.open && (
-        <BuyStockWindow
-          uuid={id}
-          onClose={closeBuyPopup}
-          stock={stock}
-        />
+        <BuyStockWindow uuid={id} onClose={closeBuyPopup} stock={stock} />
       )}
       {sellPopup.open && (
-        <SellStockWindow
-          uuid={id}
-          onClose={closeSellPopup}
-          stock={stock}
-        />
+        <SellStockWindow uuid={id} onClose={closeSellPopup} stock={stock} />
       )}
     </li>
   );
 };
 
-const WatchListItemsActions = ({ name,uuid, openBuyPopup, openSellPopup }) => {
+const WatchListItemsActions = ({ name, uuid, openBuyPopup, openSellPopup,curruserId }) => {
   const [names, setNames] = useState([]);
+
+  const [allHoldings, setAllHoldings] = useState([]);
 
   useEffect(() => {
     const fetchNames = async () => {
       try {
         const res = await axios.get("http://localhost:3002/allHoldings");
-        setNames(res.data.map((singledata) => singledata.name));
+        setAllHoldings(res.data);
       } catch (err) {
         console.log("Error:", err);
       }
@@ -136,6 +144,23 @@ const WatchListItemsActions = ({ name,uuid, openBuyPopup, openSellPopup }) => {
 
     fetchNames();
   }, []);
+
+  
+useEffect(() => {
+  if (!Array.isArray(allHoldings)) return;
+
+  // filter by user
+  const filtered = allHoldings.filter(
+    (item) => item.userId === curruserId
+  );
+
+  // extract names
+  const namesList = filtered.map((item) => item.name);
+
+  // update state only once per change
+  setNames(namesList);
+
+}, [allHoldings, curruserId]);
 
   return (
     <span className="actions">

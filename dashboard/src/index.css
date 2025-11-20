@@ -427,7 +427,7 @@ hr {
   font-size: 0.9rem;
   color: rgb(73, 73, 73);
 }
-
+ 
 
 .align-left {
   text-align: center;
@@ -1060,4 +1060,36 @@ fieldset {
 
 .Usermenu button:hover {
   transform : scale(1.08);
+}
+
+.form-signup-login {
+  display : flex;
+  flex-direction : column;
+  justify-content : center;
+  align-items : center;
+}
+
+.form-signup-login input {
+  width : 70%!important;
+  padding : 1rem!important;
+}
+
+@media (max-width: 431px){
+  .form-signup-login input {
+    width : 140%!important;
+  }
+}
+
+@media (max-width: 431px){
+  .form-signup-login button {
+    width : 80%!important;
+  }
+}
+.form-signup-login button {
+  border-radius : 1rem;
+  width : 30%;
+}
+
+.signup-form {
+  margin-top : 1rem;
 }

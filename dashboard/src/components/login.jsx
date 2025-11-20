@@ -72,10 +72,10 @@ function Login() {
           investors and traders
         </p>
       </div>
-      <div className="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-center signup-form">
         <div style={{ marginTop: "2rem" }} className="col-6 mt-5">
-          <p className="fw-semibold fs-4">Login</p>
-          <form onSubmit={handleSubmit}>
+          <p className="fw-semibold fs-3">Zerodha Login</p>
+          <form className="form-signup-login" onSubmit={handleSubmit}>
             <input
               name="username"
               onChange={handleOnChange}
@@ -85,7 +85,7 @@ function Login() {
                 width: "22rem",
                 border: "1px solid grey",
               }}
-              placeholder="Enter Username"
+              placeholder="Username"
               className="mt-3 fs-5 rounded"
               type="text"
             ></input>
@@ -98,7 +98,7 @@ function Login() {
                 width: "22rem",
                 border: "1px solid grey",
               }}
-              placeholder="Enter Email"
+              placeholder="Email"
               className="mt-3 fs-5 rounded"
               type="email"
             ></input>
@@ -111,7 +111,7 @@ function Login() {
                 width: "22rem",
                 border: "1px solid grey",
               }}
-              placeholder="Enter Password"
+              placeholder="Password"
               className="mt-3 fs-5 rounded"
               type="password"
             ></input>
@@ -128,8 +128,8 @@ function Login() {
               </a>
             </p>
             <p style={{ fontSize: "0.8rem" }} className="mt-2">
-              Already have an account?{" "}
-              <Link to="/login" className="">
+              New to app?{" "}
+              <Link to="/signup" className="">
                 Click here
               </Link>
             </p>
