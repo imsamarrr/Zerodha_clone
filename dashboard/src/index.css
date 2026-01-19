@@ -1093,3 +1093,7 @@ fieldset {
 .signup-form {
   margin-top : 1rem;
 }
+
+.qty-funds .funds-box{
+  width : 150px;
+}

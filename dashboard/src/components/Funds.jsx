@@ -1,12 +1,23 @@
 import React from "react";
+import {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 
 const Funds = () => {
+  const [funds,setFunds] = useState(0);
+  const [fundsPopup,setFundsPopup] = useState({open : false});
+  const openfundsPopup = ()=>{
+    setFundsPopup({open : true});
+  }
+  
+  const closefundsPopup = ()=>{
+    setFundsPopup({open : false});
+  }
   return (
     <>
       <div className="funds">
         <p>Instant, zero-cost fund transfers with UPI </p>
-        <Link className="btn btn-green">Add funds</Link>
+        <button onClick={()=>openfundsPopup()} className="btn btn-green">Add funds</button>
+        {fundsPopup.open && <FundsWindow onClose={closefundsPopup}/>}
         <Link className="btn btn-blue">Withdraw</Link>
       </div>
 
@@ -18,8 +29,8 @@ const Funds = () => {
 
           <div className="table">
             <div className="data">
-              <p>Available margin</p>
-              <p className="imp colored">4,043.10</p>
+              <p>Available funds</p>
+              <p className="imp colored">{funds}</p>
             </div>
             <div className="data">
               <p>Used margin</p>
@@ -86,3 +97,45 @@ const Funds = () => {
 };
 
 export default Funds;
+
+const FundsWindow = ({onClose})=>{
+
+  return (
+    <div>
+      <div className="container buy-cnt" draggable="true">
+        <fieldset>
+      <div className="inputs">
+          <div className="qty-funds">
+            <label htmlFor="funds">Funds</label>
+            <input
+            className="funds-box"
+              type="number"
+              placeholder="Enter Amount"
+              id="funds"
+              name="funds"
+              onChange={(e)=>setFunds(e.target.value)}
+            ></input>
+          </div>
+      </div>
+          </fieldset>
+      <div className="buy-margin">
+        <div className="items-buymargin">
+          <div className="buttons-buy-cancel">
+            <button
+              style={{ backgroundColor: "rgb(66, 135, 245)", color: "white" ,width : "100px"}}
+            >
+              Add funds
+            </button>
+            <button
+              style={{ border: "1px solid grey" }}
+              onClick = {()=>onClose()}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  )
+}
