@@ -30,6 +30,7 @@ app.use(
       "http://localhost:5174",
       "https://zerodha-clone-dashboard-flax.vercel.app",
       "https://zerodha-clone-frontend-two.vercel.app",
+      "https://zerodha-clone-dashboard-ik3yjem3f.vercel.app",
     ],
     methods: ["GET" , "POST", "PUT" , "DELETE" , "OPTIONS"],
     credentials: true,
