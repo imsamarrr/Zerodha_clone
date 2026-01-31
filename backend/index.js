@@ -26,15 +26,20 @@ mongoose
 
 app.use(
   cors({
-    origin: "http://localhost:5174",
+    origin: [
+      "http://localhost:5174",
+      "https://zerodha-clone-dashboard-flax.vercel.app",
+      "https://zerodha-clone-frontend-two.vercel.app",
+    ],
+    methods: ["GET" , "POST", "PUT" , "DELETE" , "OPTIONS"],
     credentials: true,
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/allholdings",async (req, res) => {
+app.get("/allholdings", async (req, res) => {
   const allholdings = await holdingsmodel.find({});
   res.json(allholdings);
 });
@@ -157,7 +162,7 @@ app.post("/sellStock/:action", async (req, res) => {
     let result = await holdingsmodel.findOneAndUpdate(
       { name: name },
       { $inc: { qty: -parsedqty, price: -sellpricefixed } },
-      { new: true }
+      { new: true },
     );
     return res.json({ message: "Partial sale successful", holdings: result });
   } else {
@@ -167,16 +172,16 @@ app.post("/sellStock/:action", async (req, res) => {
 });
 
 app.post("/buyorder/:action", async (req, res) => {
-  const { name, qty, avg, price,curruserId } = req.body;
+  const { name, qty, avg, price, curruserId } = req.body;
   let result = await holdingsmodel.findOneAndUpdate(
-    { name: name , userId : curruserId },
+    { name: name, userId: curruserId },
     { $inc: { qty: qty, price: price } },
-    { new: true }
+    { new: true },
   );
   return res.json({ message: "Holding updates", holdings: result });
 });
 
-app.post("/newOrder",async (req, res) => {
+app.post("/newOrder", async (req, res) => {
   try {
     let newOrder = new ordersModel({
       name: req.body.name,
@@ -194,7 +199,7 @@ app.post("/newOrder",async (req, res) => {
       price: req.body.price,
       net: "Null",
       day: "Null",
-      userId : req.body.curruserId
+      userId: req.body.curruserId,
     });
     newHoldings.save();
 
