@@ -65,6 +65,13 @@ app.get("/allWatchlist", async (req, res) => {
   res.json(allWatchlist);
 });
 
+res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,        // REQUIRED for HTTPS (Vercel + Render)
+  sameSite: "none",    // REQUIRED for cross-origin
+});
+
+
 app.get("/orders", async (req, res) => {
   const orders = await ordersModel.find({});
   res.json(orders);
