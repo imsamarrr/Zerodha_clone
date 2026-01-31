@@ -136,8 +136,8 @@ app.post("/login", async (req, res) => {
       httpOnly: false,
       path: "/", // Make cookie available throughout the app
       httpOnly: false, // MUST be false so your Home.jsx can read 'cookies.token'
-      secure: false, // MUST be false because you are on localhost (http, not https)
-      sameSite: "Lax",
+      secure: true, // MUST be false because you are on localhost (http, not https)
+      sameSite: "None",
     });
     res.status(201).json({ message: "User logged in", success: true, user });
   } catch (err) {
