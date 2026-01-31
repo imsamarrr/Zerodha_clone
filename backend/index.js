@@ -67,8 +67,8 @@ app.get("/allWatchlist", async (req, res) => {
 
 res.cookie("token", token, {
   httpOnly: true,
-  secure: true,        // REQUIRED for HTTPS (Vercel + Render)
-  sameSite: "none",    // REQUIRED for cross-origin
+  secure: true,       // REQUIRED on HTTPS
+  sameSite: "none",   // REQUIRED for cross-origin
 });
 
 
