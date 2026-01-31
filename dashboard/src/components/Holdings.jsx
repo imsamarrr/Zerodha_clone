@@ -25,7 +25,7 @@ const Holdings = () => {
   // };
 
   useEffect(() => {
-    axios.get("https://zerodha-clone-backend-1svz.onrender.com/allHoldings").then((res) => {
+    axios.get("https://zerodha-clone-backend-1svz.onrender.com/allholdings").then((res) => {
       setAllHoldings(res.data);
     });
   }, []);
