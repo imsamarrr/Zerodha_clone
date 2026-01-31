@@ -20,6 +20,7 @@ code {
   box-sizing: border-box;
 }
 
+
 .content {
   flex-basis: 68%;
   height: 100%;
@@ -595,6 +596,12 @@ hr {
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+@media (max-width: 431px){
+  .indices-container {
+    width : 8rem!important;
+  }
 }
 
 .nifty {

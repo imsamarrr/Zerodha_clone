@@ -12,7 +12,7 @@ import SellStockWindow from "./SellStockWindow";
 const WatchList = () => {
   const [watchlist, setWatchlist] = useState([]);
   const getOrders = async () => {
-    const res = await axios.get("http://localhost:3002/allWatchlist");
+    const res = await axios.get("https://zerodha-clone-backend-1svz.onrender.com/allWatchlist");
     setWatchlist(res.data);
   };
 
@@ -79,7 +79,7 @@ const WatchListItem = ({ stock }) => {
   useEffect(() => {
     let fetchcurruserId = async () => {
       const res = await axios.post(
-        "http://localhost:3002/",
+        "https://zerodha-clone-backend-1svz.onrender.com/",
         {},
         { withCredentials: true }
       );
@@ -135,7 +135,7 @@ const WatchListItemsActions = ({ name, uuid, openBuyPopup, openSellPopup,curruse
   useEffect(() => {
     const fetchNames = async () => {
       try {
-        const res = await axios.get("http://localhost:3002/allHoldings");
+        const res = await axios.get("https://zerodha-clone-backend-1svz.onrender.com/allHoldings");
         setAllHoldings(res.data);
       } catch (err) {
         console.log("Error:", err);

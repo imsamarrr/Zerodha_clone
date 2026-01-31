@@ -33,7 +33,7 @@ function Signup() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3002/signup",
+        "https://zerodha-clone-backend-1svz.onrender.com/signup",
         {
           ...inputValue,
         },
@@ -43,7 +43,7 @@ function Signup() {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "http://localhost:5174/holdings";
+          window.location.href = "https://zerodha-clone-dashboard-flax.vercel.app/holdings";
         }, 1000);
       } else {
         handleError(message);

@@ -35,7 +35,7 @@ function Signup() {
     event.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3002/signup",
+        "https://zerodha-clone-backend-1svz.onrender.com/signup",
         {
           ...inputValues,
         },

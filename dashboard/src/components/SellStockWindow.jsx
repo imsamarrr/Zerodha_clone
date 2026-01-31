@@ -60,7 +60,7 @@ const SellStockWindow = ({ uuid, onClose, stock }) => {
 
     try{
       let endpoint = fullySold ? "deletestock" : "updateholdings";
-      const res = await axios.post(`http://localhost:3002/sellStock/${endpoint}`,sellData);
+      const res = await axios.post(`https://zerodha-clone-backend-1svz.onrender.com/${endpoint}`,sellData);
       console.log("Sell order successful :",res.data);
       onClose(uuid);
       getholdings();

@@ -25,7 +25,7 @@ const Holdings = () => {
   // };
 
   useEffect(() => {
-    axios.get("http://localhost:3002/allHoldings").then((res) => {
+    axios.get("https://zerodha-clone-backend-1svz.onrender.com/allHoldings").then((res) => {
       setAllHoldings(res.data);
     });
   }, []);
@@ -35,7 +35,7 @@ const Holdings = () => {
   useEffect(() => {
     let fetchcurruserId = async () => {
       const result = await axios.post(
-        "http://localhost:3002/",
+        "https://zerodha-clone-backend-1svz.onrender.com/",
         {},
         { withCredentials: true }
       );

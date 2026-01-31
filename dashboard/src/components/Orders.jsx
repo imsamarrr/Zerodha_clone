@@ -10,7 +10,7 @@ const Orders = () => {
   const [allStocks, setAllStocks] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3002/allStocks").then((res) => {
+    axios.get("https://zerodha-clone-backend-1svz.onrender.com/allStocks").then((res) => {
       setAllStocks(res.data);
     });
   }, []);

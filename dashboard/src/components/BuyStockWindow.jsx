@@ -7,7 +7,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
   const [stockPrice, setStockPrice] = useState(stock.price);
   const handleBuyClick = async () => {
     try {
-      // const res = await axios.post("http://localhost:3002/newOrder", {
+      // const res = await axios.post("https://zerodha-clone-backend-1svz.onrender.com/newOrder", {
       //   id : uuid,
       //   name: stock.name,
       //   qty: stockQuantity,
@@ -16,10 +16,10 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
       //   mode: "Buy",
       // });
 
-      const {data} = await axios.post("http://localhost:3002/",{},{withCredentials : true});
+      const {data} = await axios.post("https://zerodha-clone-backend-1svz.onrender.com/",{},{withCredentials : true});
       let {curruserId} = data;
 
-      const allHoldings = await axios.get("http://localhost:3002/allholdings");
+      const allHoldings = await axios.get("https://zerodha-clone-backend-1svz.onrender.com/allholdings");
       const namematch = allHoldings.data.find(
         (items) => items.name === stock.name && items.userId === curruserId
       );
@@ -37,7 +37,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
       };
       if (namematch) {
         const res = await axios.post(
-          `http://localhost:3002/buyorder/${mode}`,
+          `https://zerodha-clone-backend-1svz.onrender.com/buyorder/${mode}`,
           buyData
         );
         onClose();
@@ -46,7 +46,7 @@ const BuyStockWindow = ({ uuid, onClose, stock }) => {
           `${stockQuantity} Shares of ${stock.name} are bought and updated in holdings`
         );
       } else {
-        const res = await axios.post(`http://localhost:3002/newOrder`, buyData);
+        const res = await axios.post(`https://zerodha-clone-backend-1svz.onrender.com/newOrder`, buyData);
         onClose();
         console.log("Order created");
         console.log(curruserId);
