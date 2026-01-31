@@ -43,7 +43,7 @@ function Signup() {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "https://zerodha-clone-dashboard-flax.vercel.app/holdings";
+          window.location.href = "https://zerodha-clone-dashboard-oq0nsgeoj.vercel.app/holdings";
         }, 1000);
       } else {
         handleError(message);

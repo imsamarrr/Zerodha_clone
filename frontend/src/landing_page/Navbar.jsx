@@ -22,7 +22,7 @@ function Navbar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <Link class="nav-link anchor-tag-Navbar" to="https://zerodha-clone-backend-1svz.onrender.com/signup">
+                <Link class="nav-link anchor-tag-Navbar" to="https://zerodha-clone-dashboard-oq0nsgeoj.vercel.app/signup">
                   Signup
                 </Link>
               </li>
